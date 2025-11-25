@@ -1,0 +1,7 @@
+
+d
+java:S1192s"NDefine a constant instead of duplicating this literal "dateofJoining" 3 times.(…ύΊ¤
+m
+java:S3776h"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ΰώÿÿÿÿ
+K
+java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬θύÿÿÿÿ

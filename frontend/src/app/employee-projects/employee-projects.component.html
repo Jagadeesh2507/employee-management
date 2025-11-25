@@ -1,0 +1,91 @@
+<div class="container mt-4">
+
+  <h3 class="fw-bold mb-4 text-primary d-flex align-items-center gap-2">
+    <i class="bi bi-briefcase-fill"></i> My Assigned Projects
+  </h3>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="alert alert-info d-flex align-items-center gap-2">
+    <i class="bi bi-arrow-clockwise spinner-border spinner-border-sm"></i>
+    Loading assigned projects...
+  </div>
+
+  <!-- No Projects -->
+  <p *ngIf="!loading && myProjects.length === 0" class="alert alert-warning">
+    You are currently not assigned to any projects.
+  </p>
+
+  <!-- Project Cards -->
+  <div *ngIf="!loading && myProjects.length > 0" class="row g-4">
+
+    <div *ngFor="let p of myProjects" class="col-md-6 col-lg-4">
+      <div class="project-card shadow-sm p-3 rounded">
+
+        <!-- Title -->
+        <h5 class="fw-bold text-dark mb-1">
+          <i class="bi bi-folder-fill text-warning"></i> {{ p.title }}
+        </h5>
+
+        <!-- Client Name -->
+        <p class="text-muted small mb-2">
+          <i class="bi bi-person-badge"></i> Client: <strong>{{ p.clientName }}</strong>
+        </p>
+
+        <!-- Description -->
+        <p class="text-muted desc-box">
+          {{ p.description }}
+        </p>
+
+        <!-- Technology Tags -->
+        <div class="mb-3">
+          <span class="badge bg-secondary me-1"
+                *ngFor="let tech of p.technology?.split(',')">
+            {{ tech.trim() }}
+          </span>
+        </div>
+
+        <!-- Dates -->
+        <div class="row mb-2">
+          <div class="col-6 small text-muted">
+            <i class="bi bi-calendar-check text-success"></i>
+            Start: <br>
+            <strong>{{ p.startDate | date:'mediumDate' }}</strong>
+          </div>
+
+          <div class="col-6 small text-muted text-end">
+            <i class="bi bi-calendar-event text-danger"></i>
+            End: <br>
+            <strong>{{ p.endDate | date:'mediumDate' }}</strong>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress mb-3" style="height: 8px;">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            [style.width]="calculateProgress(p.startDate, p.endDate)"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100">
+          </div>
+        </div>
+
+        <!-- Status Badge + Budget -->
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="badge px-3 py-2"
+                [ngClass]="getStatusClass(p.status)">
+            {{ p.status }}
+          </span>
+
+          <span class="fw-bold text-success">
+            <i class="bi bi-cash"></i> ₹{{ p.budget }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

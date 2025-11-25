@@ -1,0 +1,37 @@
+<div class="d-flex app-container" style="min-height: 100vh;">
+  <!-- Sidebar/Navigation for Employee -->
+  <nav class="sidebar bg-dark text-white p-3 shadow-lg">
+    <!-- Assuming userRole is available in the component TS to display the title -->
+    <h4 class="mb-4 text-warning fw-bold">Role: Employee</h4> 
+    <ul class="nav flex-column gap-2">
+      
+      <!-- 🎯 Employee Tab: My Info (Correct RELATIVE path) -->
+      <li class="nav-item">
+        <!-- Path is relative to the parent route /employee-app -->
+        <a routerLink="my-info" routerLinkActive="active" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-person-circle"></i> My Info (Employee Screen)
+        </a>
+      </li>
+      
+      <!-- 🎯 Project Tab: My Projects (Correct RELATIVE path) -->
+      <li class="nav-item">
+        <!-- Path is relative to the parent route /employee-app -->
+        <a routerLink="my-projects" routerLinkActive="active" class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-folder-fill"></i> My Projects
+        </a>
+      </li>
+      
+    </ul>
+  </nav>
+  
+  <!-- Main Content Area (Employee Form or Employee Projects loads here) -->
+  <main class="content flex-grow-1 p-4 bg-light">
+    <router-outlet></router-outlet> 
+  </main>
+</div>
+<style>
+  /* Styles moved to external file in full solution, but included here for reference */
+  .sidebar { width: 280px; min-width: 280px; padding-top: 20px !important; }
+  .nav-link { border-radius: 5px; transition: background-color 0.2s; }
+  .nav-link.active { background-color: #007bff; font-weight: bold; }
+</style>

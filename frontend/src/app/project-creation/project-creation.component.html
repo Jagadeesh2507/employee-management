@@ -1,0 +1,196 @@
+
+    <!-- Main Content -->
+  <div class="container mt-4 p-4 border rounded shadow bg-light">
+    
+<div class="position-absolute top-0 end-0 m-3">
+    <app-notification-bell></app-notification-bell>
+  </div>
+
+     <form (ngSubmit)="createProject()" #projectForm="ngForm" novalidate>
+    
+
+    <!-- Header Row -->
+    
+<div class="row align-items-center mb-4 text-center text-md-start">
+  <!-- Dashboard Button -->
+  <div class="col-12 col-md-3 mb-2 mb-md-0 text-md-start">
+    <a [routerLink]="['/app-dashboard']"
+       class="btn btn-outline-primary d-inline-flex align-items-center gap-2 shadow"
+       style="border-radius: 50px; padding: 0.5rem 1rem;">
+      <i class="bi bi-grid-fill fs-5"></i>
+      <span class="d-none d-md-inline">Dashboard</span>
+    </a>
+  </div>
+
+  <!-- Title Centered -->
+  <div class="col-12 col-md-6 mb-2 mb-md-0">
+    <h4 class="mb-0 fw-bold text-center">Project Creation Form</h4>
+  </div>
+
+  <!-- User Greeting + Logout -->
+  <div class="col-12 col-md-3 text-md-end text-center">
+    <div *ngIf="user" class="d-inline-flex align-items-center gap-2">
+      <span>
+        Welcome, <strong class="user-signature-font">{{ user }}!</strong>
+      </span>
+      <button class="btn btn-primary rounded-md" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+
+ 
+   
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="title" class="form-label">Project Title <span style="color: red;"> *</span></label>
+          <input type="text" class="form-control" id="title" name="title" [(ngModel)]="project.title" #title="ngModel" required minlength="3" maxlength="100">
+          <div *ngIf="title.invalid && (title.dirty || title.touched)" class="text-danger">
+            Title is required (3-100 characters).
+          </div>
+        </div>
+ 
+        <div class="col-md-6">
+          <label for="technology" class="form-label">Technology Stack <span style="color: red;"> *</span></label>
+<input type="text" class="form-control" id="technology" name="technology" [(ngModel)]="project.technology" #technology="ngModel" required pattern="[a-zA-Z,\s]+">
+          <div *ngIf="technology.invalid && (technology.dirty || technology.touched)" class="text-danger">
+            Technology is required. Use only letters and commas.
+          </div>
+        </div>
+      </div>
+ 
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="clientName" class="form-label">Client Name <span style="color: red;"> *</span></label>
+          <input type="text" class="form-control" id="clientName" name="clientName" [(ngModel)]="project.clientName" #clientName="ngModel" required>
+          <div *ngIf="clientName.invalid && (clientName.dirty || clientName.touched)" class="text-danger">
+            Client name is required.
+          </div>
+        </div>
+ 
+        <div class="col-md-6">
+          <label for="budget" class="form-label">Estimated Budget <span style="color: red;"> *</span></label>
+          <input type="number" class="form-control" id="budget" name="budget" [(ngModel)]="project.budget" #budget="ngModel" required min="1000">
+          <div *ngIf="budget.invalid && (budget.dirty || budget.touched)" class="text-danger">
+            Budget must be at least 1,000.
+          </div>
+        </div>
+      </div>
+ 
+      <div class="mb-3">
+        <label for="description" class="form-label">Description <span style="color: red;"> *</span></label>
+        <textarea class="form-control" id="description" name="description" rows="4" [(ngModel)]="project.description" #description="ngModel" required minlength="10"></textarea>
+        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="text-danger">
+          Description must be at least 10 characters.
+        </div>
+      </div>
+ 
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="startDate" class="form-label">Start Date <span style="color: red;"> *</span></label>
+          <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="project.startDate" #startDate="ngModel" required>
+          <div *ngIf="startDate.invalid && (startDate.dirty || startDate.touched)" class="text-danger">
+            Start date is required.
+          </div>
+        </div>
+ 
+        <div class="col-md-6">
+          <label for="endDate" class="form-label">End Date <span style="color: red;"> *</span></label>
+          <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="project.endDate" #endDate="ngModel" required>
+          <div *ngIf="endDate.invalid && (endDate.dirty || endDate.touched)" class="text-danger">
+            End date is required.
+          </div>
+        </div>
+      </div>
+ 
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary px-5" *ngIf="user.toLowerCase()=='admin'" [disabled]="projectForm.invalid">{{isEditMode? 'Update': 'save'}}</button>
+      </div>
+    </form>
+ 
+    <div *ngIf="successMessage" class="alert alert-success mt-3 text-center fade-out">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center fade-out">{{ errorMessage }}</div>
+  <div class="container mt-4 p-4 border rounded shadow bg-light">
+  <h5 class="text-primary mb-3 text-center fw-bold">Project List</h5>
+ 
+  <!-- Top controls -->
+  
+
+<div class="row mb-3">
+  <!-- Search on the left -->
+  <div class="col-12 col-md-6">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" class="form-control" placeholder="Search title...">
+  </div>
+
+  <!-- Count dropdown on the right -->
+  <div class="col-12 col-md-6 d-flex justify-content-md-end align-items-center mt-2 mt-md-0">
+    <label for="pageSize" class="me-2 mb-0">Count</label>
+    <select id="pageSize" class="form-select form-select-sm w-auto" [(ngModel)]="pageSize" (change)="applyPagination()">
+      <option *ngFor="let size of [3, 5, 10, 20]" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+</div>
+
+
+  <!-- Column Headers -->
+  <div class="row fw-bold border-bottom pb-2 mb-2 text-nowrap">
+    <div class="col-2 col-sm-1">#</div>
+    <div class="col-4 col-sm-2">Title</div>
+    <div class="col-4 col-sm-2">Client</div>
+    <div class="col-6 col-sm-2">Start Date</div>
+    <div class="col-6 col-sm-2">
+      <span>End Date</span>
+      <span *ngIf="sortDirection === 'asc'" (click)="toggleSort()" style="cursor: pointer;">▲</span>
+      <span *ngIf="sortDirection === 'desc'" (click)="toggleSort()" style="cursor: pointer;">▼</span>
+    </div>
+    <div class="col-6 col-sm-1">Edit</div>
+    <div class="col-6 col-sm-1">Delete</div>
+    <div class="col-12 col-sm-1 text-sm-end">File</div>
+  </div>
+
+  <!-- Project Rows -->
+  <div *ngIf="projects.length > 0">
+    <div class="row py-2 border-bottom align-items-center text-nowrap" *ngFor="let proj of projects; let i = index">
+      <div class="col-2 col-sm-1">{{ (currentPage - 1) * pageSize + i + 1 }}</div>
+      <div class="col-4 col-sm-2">{{ proj.title }}</div>
+      <div class="col-4 col-sm-2">{{ proj.clientName }}</div>
+      <div class="col-6 col-sm-2">{{ proj.startDate | date: 'yyyy-MM-dd' }}</div>
+      <div class="col-6 col-sm-2">{{ proj.endDate | date: 'yyyy-MM-dd' }}</div>
+      <div class="col-6 col-sm-1">
+        <button type="button" class="btn btn-link btn-sm p-0" (click)="editProject(proj)">view/Edit</button>
+      </div>
+      <div class="col-6 col-sm-1">
+        <button class="btn btn-danger btn-sm" (click)="confirmDelete(proj.id)">Delete</button>
+      </div>
+      <div class="col-12 col-sm-1 text-sm-end mt-2 mt-sm-0">
+        <button class="btn btn-outline-success btn-sm" (click)="downloadExcel(proj.id)">
+          <i class="bi bi-file-earmark-excel"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Data -->
+  <div *ngIf="projects.length === 0" class="alert alert-info mt-3">
+    No projects to display.
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-end mt-3 flex-wrap" *ngIf="totalPages > 1">
+    <ul class="pagination mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of getPages()" [class.active]="currentPage === page">
+        <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+
+ 
+

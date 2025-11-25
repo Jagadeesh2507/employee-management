@@ -1,0 +1,14 @@
+
+b
+java:S1192€"KDefine a constant instead of duplicating this literal "clientName" 3 times.(ÿî³†
+b
+java:S1192‡"KDefine a constant instead of duplicating this literal "technology" 3 times.(öğ‚ö
+`
+java:S1192d"JDefine a constant instead of duplicating this literal "startDate" 3 times.(áÚå¿
+m
+java:S3776X"RRefactor this method to reduce its Cognitive Complexity from 37 to the 15 allowed.(ëÅĞÉúÿÿÿÿ
+Z
+java:S1128"DRemove this unused import 'com.employeeformapp.dto.ProjectResponse'.(ÉÕÌŒ
+P
+java:S1128
+";Remove this unused import 'jakarta.persistence.TypedQuery'.(•Çã

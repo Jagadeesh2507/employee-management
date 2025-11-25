@@ -1,0 +1,8 @@
+
+.card > div {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.input-group-text i {
+  color: #007bff; /* Bootstrap primary color */
+}

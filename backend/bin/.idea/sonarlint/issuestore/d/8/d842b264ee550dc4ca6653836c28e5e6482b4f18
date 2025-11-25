@@ -1,0 +1,9 @@
+
+\
+java:S1192+"FDefine a constant instead of duplicating this literal "error" 3 times.(äÑ˜œ
+„
+java:S1488E"iImmediately return this expression instead of assigning it to the temporary variable "assignedEmployees".(É¥©€øÿÿÿÿ
+
+java:S1488J"kImmediately return this expression instead of assigning it to the temporary variable "unAssignedEmployees".(­­
+_
+java:S1128"DRemove this unused import 'org.springframework.http.ResponseEntity'.(¶¯ø¦úÿÿÿÿ

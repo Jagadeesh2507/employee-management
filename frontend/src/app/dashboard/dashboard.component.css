@@ -1,0 +1,5 @@
+.user-signature-font {
+  font-family: 'Pacifico', cursive; /* Use the exact font-family name from Google Fonts */
+  font-size: 1.2em; /* Adjust size to make it more prominent if needed */
+  color: #333;
+}

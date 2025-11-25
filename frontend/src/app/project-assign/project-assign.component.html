@@ -1,0 +1,268 @@
+<!-- project-assignment.component.html -->
+  <!-- Main Content -->
+  <div class="container mt-4 p-4 border rounded shadow bg-light">
+    
+<div class="position-absolute top-0 end-0 m-3">
+    <app-notification-bell></app-notification-bell>
+</div>
+
+    <form (ngSubmit)="assignProject()" #assignForm="ngForm" class="shadow p-4 rounded bg-light" novalidate>
+    
+<div class="row align-items-center mb-4 text-center text-md-start">
+  <!-- Dashboard Button -->
+  <div class="col-12 col-md-3 mb-2 mb-md-0 text-md-start">
+    <a [routerLink]="['/app-dashboard']"
+       class="btn btn-outline-primary d-inline-flex align-items-center gap-2 shadow"
+       style="border-radius: 50px; padding: 0.5rem 1rem;">
+      <i class="bi bi-grid-fill fs-5"></i>
+      <span class="d-none d-md-inline">Dashboard</span>
+    </a>
+  </div>
+
+  <!-- Title Centered -->
+  <div class="col-12 col-md-6 mb-2 mb-md-0">
+    <h4 class="mb-0 fw-bold text-center">Assign Project to Employee</h4>
+  </div>
+
+  <!-- User Greeting + Logout -->
+  <div class="col-12 col-md-3 text-md-end text-center">
+    <div *ngIf="user" class="d-inline-flex align-items-center gap-2">
+      <span>
+        Welcome, <strong class="user-signature-font">{{ user }}!</strong>
+      </span>
+      <button class="btn btn-primary rounded-md" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+ 
+  <div class="row g-2 align-items-start mb-3">
+  <!-- Filter Dropdown -->
+  <div class="col-md-3 col-12">
+    <label for="filterType" class="form-label">Filter By</label>
+    <select id="filterType" class="form-select" [(ngModel)]="selectedFilter" (ngModelChange)="onFilterChange($event)" name="filterType">
+      <option value="name">Name</option>
+      <option value="skill">Skill</option>
+    </select>
+  </div>
+
+  <!-- Search Input -->
+  <div class="col-md-9 col-12">
+    <label for="employeeSearch" class="form-label">Search Employee <span style="color: red;">*</span></label>
+    <input type="text" id="employeeSearch" class="form-control"
+           [(ngModel)]="employeeSearchText"
+           name="empSearch"
+           (input)="searchEmployee(employeeSearchText)"
+           required #empId="ngModel"
+           [placeholder]="selectedFilter === 'skill' ? 'Type skill name (e.g. Java)' : '📌 Type employee name'" />
+
+    <!-- Error Message -->
+    <div class="text-danger mt-1" *ngIf="empId.invalid && (empId.dirty || empId.touched)">
+      Employee is required
+    </div>
+
+    <!-- Search Results -->
+    <ul class="list-group position-absolute w-100 z-3" *ngIf="employeeResults.length > 0">
+      <li class="list-group-item" *ngFor="let emp of employeeResults" (click)="selectEmployee(emp)">
+        {{ emp.name + " - " + emp.skill }}
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+ 
+      <!-- Project Search -->
+      <div class="mb-3 position-relative">
+        <label for="projectSearch" class="form-label">Search Project <span style="color: red;"> *</span></label>
+        <input type="text" id="projectSearch" class="form-control" [(ngModel)]="projectSearchText"
+               name="projSearch" (input)="searchProject(projectSearchText)" required #projId="ngModel"
+               placeholder="📌 Type at least Two letters to search and select an Project from the dropdown">
+         <div class="text-danger" *ngIf="projId.invalid && (projId.dirty || projId.touched)">
+          Project is required.
+        </div>
+        <ul class="list-group position-absolute w-100 z-3" *ngIf="projectResults.length > 0">
+          <li class="list-group-item" *ngFor="let proj of projectResults" (click)="selectProject(proj)">
+            {{ proj.title }}
+          </li>
+        </ul>
+      </div>
+ 
+      <!-- Role -->
+      <div class="mb-3">
+        <label for="role" class="form-label">Role <span style="color: red;"> *</span></label>
+        <input type="text" class="form-control" id="role" [(ngModel)]="assignment.role" name="role" readonly required #roleCtrl="ngModel">
+          <div class="text-danger" *ngIf="roleCtrl.invalid && (roleCtrl.dirty || roleCtrl.touched)">
+          Role is required.
+        </div>
+      </div>
+ 
+      <!-- Assigned Date -->
+      <div class="mb-3">
+        <label for="assignedDate" class="form-label">Assigned Date <span style="color: red;"> *</span></label>
+        <input type="date" class="form-control" id="assignedDate"
+               [(ngModel)]="assignment.assignedDate" name="assignedDate" required #dateCtrl="ngModel">
+                <div class="text-danger" *ngIf="dateCtrl.invalid && (dateCtrl.dirty || dateCtrl.touched)">
+          Assigned date is required.
+        </div>
+      </div>
+ 
+      <!-- Remarks -->
+      <div class="mb-3">
+        <label for="remarks" class="form-label">Remarks</label>
+        <textarea class="form-control" id="remarks" rows="3"
+                  [(ngModel)]="assignment.remarks" name="remarks" ></textarea>
+      </div>
+      <div class="col-sm-12 text-center">
+      <button type="submit" class="btn btn-primary" [disabled]="assignForm.invalid" *ngIf="user.toLowerCase()=='admin'">
+        Assign Project
+      </button>
+      </div>
+    </form>
+ 
+    <!-- Response messages -->
+    <div *ngIf="successMessage" class="alert alert-success mt-3 fate-out">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3 fate-out">{{ errorMessage }}</div>
+   
+   <!-- project-assignation.component.html -->
+<div class="container mt-4 p-4 border rounded shadow bg-light">
+
+    <h3 class="text-center text-primary mb-4">Project Assignations</h3>
+ 
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" [class.active]="activeTab === 'assigned'" (click)="onTabClick('assigned')"   id="assigned-tab" data-bs-toggle="tab" data-bs-target="#assigned" type="button" role="tab">
+          Assigned Employees
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="unassigned-tab" [class.active]="activeTab === 'unassigned'" (click)="onTabClick('unassigned')"  data-bs-toggle="tab" data-bs-target="#unassigned" type="button" role="tab">
+          Unassigned Employees
+        </button>
+      </li>
+    </ul>
+ 
+    <div class="tab-content mt-3">
+ 
+      <!-- Assigned Employees Tab -->
+      <div class="tab-pane fade show active" id="assigned" role="tabpanel">
+        <div class="row fw-bold border-bottom pb-2">
+          <div class="col-3">Employee Name</div>
+          <div class="col-3">Project Title</div>
+          <div class="col-3">End Date</div>
+          <div class="col-3">Action</div>
+        </div>
+        <div *ngFor="let emp of paginatedAssignedEmployees" class="row py-2 border-bottom align-items-center">
+          <div class="col-3">{{ emp.employeeName}}</div>
+          <div class="col-3">{{ emp.projectTitle }}</div>
+          <div class="col-3">{{ emp.projectEndDate | date:'yyyy-MM-dd' }}</div>
+          <div class="col-3">
+<button class="btn btn-sm btn-outline-danger" [disabled]="user.toLowerCase()!='admin'"(click)="removeAssignment(emp.projectAssignmentId)">UnAssign</button>
+          </div>
+        </div>
+ 
+        <div *ngIf="assignedEmployees.length === 0" class="text-muted mt-3">No employees assigned.</div>
+        
+      </div>
+      
+
+
+      <!-- Unassigned Employees Tab -->
+      <div class="tab-pane fade" id="unassigned" role="tabpanel">
+        <div class="row fw-bold border-bottom pb-2">
+          <div class="col-6">Employee Name</div>
+          <div class="col-4">Role</div>
+          <div class="col-2">Action</div>
+        </div>
+ 
+        <div *ngFor="let emp of paginatedUnassignedEmployees" class="row py-2 border-bottom align-items-center">
+          <div class="col-6">{{ emp.name }}</div>
+          <div class="col-4">{{ emp.designation }}</div>
+          <div class="col-2">
+<button class="btn btn-sm btn-outline-success" [disabled]="user.toLowerCase()!='admin'" (click)="selectEmployee(emp)">Assign</button>
+          </div>
+        </div>
+ 
+        <div *ngIf="unassignedEmployees.length === 0" class="text-muted mt-3">No unassigned employees.</div>
+      </div>
+      <div class="d-flex justify-content-end mt-3" *ngIf="activeTab==='unassigned' && totalUnAssignedPages > 1">
+          <ul class="pagination mb-0">
+            <!-- Previous Button -->
+            <li class="page-item" [class.disabled]="currentUnAssignedPage === 1">
+              <a class="page-link" (click)="changeUnAssignedPage(currentUnAssignedPage - 1)">Previous</a>
+            </li>
+
+            <!-- First Page (only show if not in the visible window) -->
+            <!-- <li class="page-item" *ngIf="getPages()[0] !== 1 && totalPages > maxPagesToShow" [class.active]="currentPage === 1">
+              <a class="page-link" (click)="changePage(1)">1</a>
+            </li> -->
+
+            <!-- Left Ellipsis -->
+            <li class="page-item disabled" *ngIf="getUnAssignedPages()[0] > 2 && totalUnAssignedPages > maxPagesToShow">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Dynamic Page Numbers -->
+            <li class="page-item" *ngFor="let page of getUnAssignedPages()" [class.active]="currentUnAssignedPage === page">
+              <a class="page-link" (click)="changeUnAssignedPage(page)">{{ page }}</a>
+            </li>
+
+            <!-- Right Ellipsis -->
+            <li class="page-item disabled" *ngIf="getUnAssignedPages()[getUnAssignedPages().length - 1] < totalUnAssignedPages - 1 && totalUnAssignedPages > maxPagesToShow">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Last Page (only show if not in the visible window) -->
+            <li class="page-item" *ngIf="getUnAssignedPages()[getUnAssignedPages().length - 1] !== totalUnAssignedPages && totalUnAssignedPages > maxPagesToShow" [class.active]="currentUnAssignedPage === totalUnAssignedPages">
+              <a class="page-link" (click)="changeUnAssignedPage(totalUnAssignedPages)">{{ totalUnAssignedPages }}</a>
+            </li>
+
+            <!-- Next Button -->
+            <li class="page-item" [class.disabled]="currentUnAssignedPage === totalUnAssignedPages">
+              <a class="page-link" (click)="changeUnAssignedPage(currentUnAssignedPage + 1)">Next</a>
+            </li>
+          </ul>
+        </div>
+      <div class="d-flex justify-content-end mt-3" *ngIf="activeTab==='assigned' && totalAssignedPages > 1" >
+          <ul class="pagination mb-0">
+            <!-- Previous Button -->
+            <li class="page-item" [class.disabled]="currentAssignedPage === 1">
+              <a class="page-link" (click)="changeAssignedPage(currentAssignedPage - 1)">Previous</a>
+            </li>
+
+            <!-- First Page (only show if not in the visible window) -->
+            <!-- <li class="page-item" *ngIf="getPages()[0] !== 1 && totalPages > maxPagesToShow" [class.active]="currentPage === 1">
+              <a class="page-link" (click)="changePage(1)">1</a>
+            </li> -->
+
+            <!-- Left Ellipsis -->
+            <li class="page-item disabled" *ngIf="getAssignedPages()[0] > 2 && totalAssignedPages > maxPagesToShow">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Dynamic Page Numbers -->
+            <li class="page-item" *ngFor="let page of getAssignedPages()" [class.active]="currentAssignedPage === page">
+              <a class="page-link" (click)="changeAssignedPage(page)">{{ page }}</a>
+            </li>
+
+            <!-- Right Ellipsis -->
+            <li class="page-item disabled" *ngIf="getAssignedPages()[getAssignedPages().length - 1] < totalAssignedPages - 1 && totalAssignedPages > maxPagesToShow">
+              <span class="page-link">...</span>
+            </li>
+
+            <!-- Last Page (only show if not in the visible window) -->
+            <li class="page-item" *ngIf="getAssignedPages()[getAssignedPages().length - 1] !== totalAssignedPages && totalAssignedPages > maxPagesToShow" [class.active]="currentAssignedPage === totalAssignedPages">
+              <a class="page-link" (click)="changeAssignedPage(totalAssignedPages)">{{ totalAssignedPages }}</a>
+            </li>
+
+            <!-- Next Button -->
+            <li class="page-item" [class.disabled]="currentAssignedPage === totalAssignedPages">
+              <a class="page-link" (click)="changeAssignedPage(currentAssignedPage + 1)">Next</a>
+            </li>
+          </ul>
+        </div>
+
+  </div>
+</div>
+</div>

@@ -1,0 +1,84 @@
+.employee-container {
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
+}
+
+.notification-wrapper {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.dashboard-btn {
+  border-radius: 30px;
+  padding: 0.55rem 1.2rem;
+}
+
+.title-text {
+  font-size: 1.6rem;
+}
+
+.logout-btn {
+  padding: 0.4rem 1rem;
+}
+
+.required {
+  color: red;
+}
+
+.bank-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.list-box {
+  border: 1px solid #ddd;
+}
+
+.search-btn {
+  background: transparent;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .top-header {
+    text-align: center;
+  }
+
+  .notification-wrapper {
+    top: 5px;
+    right: 5px;
+  }
+}
+.btn-clear {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer;
+}
+.btn-clear:active,
+.btn-clear:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.notification-bell {
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.top-header {
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .notification-bell {
+    margin-right: 0;
+  }
+}

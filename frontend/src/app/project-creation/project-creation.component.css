@@ -1,0 +1,37 @@
+.hover-effect:hover{
+ color: cornflowerblue;
+}
+
+.fate-out{
+    animation:fadeOut 2s forwards;
+}
+@keyframes fadeOut {
+    0%{
+        opacity: 1;
+        visibility: visible;
+    }
+    100%{
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+.user-signature-font {
+  font-family: 'Pacifico', cursive; /* Use the exact font-family name from Google Fonts */
+  font-size: 1.2em; /* Adjust size to make it more prominent if needed */
+  color: #333;
+}
+
+@media (max-width: 576px) {
+  .row > div {
+    font-size: 0.85rem;
+    padding: 0.25rem 0;
+  }
+
+  .btn-sm {
+    font-size: 0.75rem;
+  }
+
+  .form-control, .form-select {
+    font-size: 0.85rem;
+  }
+}

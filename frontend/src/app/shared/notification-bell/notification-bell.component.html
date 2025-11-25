@@ -1,0 +1,40 @@
+<div class="position-relative">
+  <i class="bi bi-bell-fill fs-4 text-primary" (click)="toggleDropdown()"></i>
+  <span *ngIf="expiredProjects.length" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    {{ expiredProjects.length }}
+  </span>
+
+  <div *ngIf="showDropdown" class="dropdown-menu show p-2" style="width: 300px;">
+    <h6 class="dropdown-header">Expired Projects</h6>
+    <div *ngFor="let proj of expiredProjects" class="dropdown-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ proj.title }}</strong><br>
+        <small>Ended: {{ proj.endDate | date }}</small>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-primary me-1" (click)="openUpdateModal(proj)">Update</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(proj.id)">Complete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update End Date Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel">Update Project End Date</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="newEndDate">New End Date:</label>
+        <input type="date" [(ngModel)]="newEndDate" class="form-control" id="newEndDate">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="confirmUpdate()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="container mt-5">
+
+  <!-- Header (3-column layout) -->
+  <div class="row align-items-center mb-4 header-row">
+
+    <!-- Left empty for spacing -->
+    <div class="col-4 d-flex justify-content-start"></div>
+
+    <!-- Center Title -->
+    <div class="col-4 d-flex justify-content-center">
+      <h2 class="text-center m-0">Admin Dashboard</h2>
+    </div>
+
+    <!-- Right: Welcome + Logout + Notification -->
+    <div class="col-4 d-flex justify-content-end align-items-center flex-wrap gap-3">
+
+      <div *ngIf="user" class="d-flex align-items-center flex-wrap">
+        <span class="me-2">
+          Welcome, <strong class="user-signature-font">{{ user }}!</strong>
+        </span>
+        <button class="btn btn-primary btn-sm rounded-md me-2" (click)="logout()">Logout</button>
+      </div>
+
+      <!-- Notification Bell -->
+      <app-notification-bell></app-notification-bell>
+    </div>
+  </div>
+
+  <!-- Dashboard Cards -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-4">
+
+    <!-- Employee Details -->
+    <div class="col">
+      <div class="card shadow text-center p-4 hover-card" (click)="navigateTo('employee-form')">
+        <div class="card-body">
+          <i class="bi bi-people-fill display-4 text-primary"></i>
+          <h5 class="mt-3">Employee Details</h5>
+          <p class="text-muted">View and manage employee records</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Creation -->
+    <div class="col">
+      <div class="card shadow text-center p-4 hover-card" (click)="navigateTo('app-project-creation')">
+        <div class="card-body">
+          <i class="bi bi-folder-plus display-4 text-success"></i>
+          <h5 class="mt-3">Project Creation</h5>
+          <p class="text-muted">Create and organize new projects</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Assignment -->
+    <div class="col">
+      <div class="card shadow text-center p-4 hover-card" (click)="navigateTo('app-project-assign')">
+        <div class="card-body">
+          <i class="bi bi-person-check-fill display-4 text-warning"></i>
+          <h5 class="mt-3">Project Assignment</h5>
+          <p class="text-muted">Assign employees to projects</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Screen -->
+    <div class="col">
+      <div class="card shadow text-center p-4 hover-card" (click)="navigateTo('app-report-screen')">
+        <div class="card-body">
+          <i class="bi bi-journal-text display-4 text-info"></i>
+          <h5 class="mt-3">Report Generator</h5>
+          <p class="text-muted">Generate Excel reports for employees or projects</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .hover-card {
+    transition: 0.25s ease;
+    border-radius: 10px;
+  }
+
+  .hover-card:hover {
+    cursor: pointer;
+    background-color: #f7f9fc;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Responsive fix for small screens */
+  @media (max-width: 576px) {
+    .header-row {
+      text-align: center;
+    }
+    .header-row .col-4 {
+      justify-content: center !important;
+    }
+  }
+</style>

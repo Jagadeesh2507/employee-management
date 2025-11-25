@@ -1,0 +1,256 @@
+<!-- Full Page Container -->
+<div class="container min-vh-100 mt-4 p-4 border rounded shadow bg-light">
+  
+<div class="position-absolute top-0 end-0 m-3">
+    <app-notification-bell></app-notification-bell>
+  </div>
+
+  <div class="container">
+
+    <!-- Page Heading -->
+    <div class="row align-items-center mb-4 text-center text-md-start">
+      <div class="col-12 col-md-3 mb-2 mb-md-0 text-md-start">
+        <a [routerLink]="['/app-dashboard']"
+           class="btn btn-outline-primary d-inline-flex align-items-center gap-2 shadow"
+           style="border-radius: 50px; padding: 0.5rem 1rem;">
+          <i class="bi bi-grid-fill fs-5"></i>
+          <span class="d-none d-md-inline">Dashboard</span>
+        </a>
+      </div>
+
+      <!-- Title Centered -->
+      <div class="col-12 col-md-6 mb-2 mb-md-0">
+        <h2 class="mb-0 fw-bold text-center">Report Generator</h2>
+        <p class="text-muted text-center">Select screen, fields, and apply filters</p>
+      </div>
+
+      <!-- User Greeting + Logout -->
+      <div class="col-12 col-md-3 text-md-end text-center">
+        <div *ngIf="user" class="d-inline-flex align-items-center gap-2">
+          <span>
+            Welcome, <strong class="user-signature-font">{{ user }}!</strong>
+          </span>
+          <button class="btn btn-primary rounded-md" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards Row -->
+    <div class="row justify-content-center mb-4">
+
+      <!-- Screens Card -->
+      <div class="col-12 col-sm-6 col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="card-title text-center">Screens</h6>
+            <ul class="list-unstyled">
+              <li class="cursor-pointer text-primary" (click)="selectScreen('employee')">
+                <span *ngIf="selectedScreen === 'employee'">▶</span> Employee Details
+              </li>
+              <li class="cursor-pointer text-primary" (click)="selectScreen('project')">
+                <span *ngIf="selectedScreen === 'project'">▶</span> Project Details
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fields Card -->
+      <div class="col-12 col-sm-6 col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="card-title text-center">Field</h6>
+
+            <div *ngIf="selectedScreen === 'employee'">
+              <ul class="list-unstyled">
+                <li class="cursor-pointer text-primary" (click)="selectfield('department')">
+                  <span *ngIf="selectedFields.includes('department')">▶</span> Department
+                </li>
+                <li class="cursor-pointer text-primary" (click)="selectfield('doj')">
+                  <span *ngIf="selectedFields.includes('doj')">▶</span> DOJ
+                </li>
+              </ul>
+            </div>
+
+            <div *ngIf="selectedScreen === 'project'">
+              <ul class="list-unstyled">
+                <li class="cursor-pointer text-primary" (click)="selectfield('startDate')">
+                  <span *ngIf="selectedFields.includes('startDate')">▶</span> Start Date
+                </li>
+                <li class="cursor-pointer text-primary" (click)="selectfield('endDate')">
+                  <span *ngIf="selectedFields.includes('endDate')">▶</span> End Date
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Conditions Card -->
+      <div class="col-12 col-sm-6 col-md-4 mb-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="card-title text-center">Filter Conditions</h6>
+
+            <!-- Employee Filters -->
+            <div *ngIf="selectedScreen === 'employee'">
+              <div *ngIf="selectedFields.includes('department')" class="mb-3 fade-in">
+                <label for="department">Select Department</label>
+                <button type="button" class="btn btn-sm btn-outline-danger float-end" (click)="removeField('department')">✕</button>
+                <select id="department" class="form-control" [(ngModel)]="filters.department">
+                  <option value="">-- Select --</option>
+                  <option value="developer">Developer</option>
+                  <option value="manager">Manager</option>
+                  <option value="tester">Tester</option>
+                </select>
+              </div>
+
+              <div *ngIf="selectedFields.includes('doj')" class="mb-3 fade-in">
+                <label for="dojStart">Start Date</label>
+                <button type="button" class="btn btn-sm btn-outline-danger float-end" (click)="removeField('doj')">✕</button>
+                <input id="dojStart" type="date" class="form-control" [(ngModel)]="filters.dojStart" />
+                <label for="dojEnd" class="mt-2">End Date</label>
+                <input id="dojEnd" type="date" class="form-control" [(ngModel)]="filters.dojEnd" />
+              </div>
+            </div>
+
+            <!-- Project Filters -->
+            <div *ngIf="selectedScreen === 'project'">
+              <div *ngIf="selectedFields.includes('startDate')" class="mb-3 fade-in">
+                <label for="projStart">Start Date</label>
+                <button type="button" class="btn btn-sm btn-outline-danger float-end" (click)="removeField('startDate')">✕</button>
+                <input id="projStart" type="date" class="form-control" [(ngModel)]="filters.startDateMin" />
+                <label for="projEnd" class="mt-2">End Date</label>
+                <input id="projEnd" type="date" class="form-control" [(ngModel)]="filters.startDateMax" />
+              </div>
+
+              <div *ngIf="selectedFields.includes('endDate')" class="mb-3 fade-in">
+                <label for="projStart" class="mt-2">Start Date</label>
+                <button type="button" class="btn btn-sm btn-outline-danger float-end" (click)="removeField('endDate')">✕</button>
+                <input id="projStart" type="date" class="form-control" [(ngModel)]="filters.endDateMin" />
+                <label for="projEnd">End Date</label>
+                <input id="projEnd" type="date" class="form-control" [(ngModel)]="filters.endDateMax" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Generate / Preview Buttons -->
+    <div class="text-center">
+      <button class="btn btn-primary me-2 px-4 py-2 rounded-pill" (click)="preview()">Preview</button>
+      <button class="btn btn-primary ms-2 px-4 py-2 rounded-pill" (click)="generate()">Generate</button>
+    </div>
+
+    <!-- ======================= PREVIEW PANEL (added) ======================= -->
+    <!-- Displays a read-only table below the buttons after preview loads -->
+   
+<div class="card mt-4" *ngIf="showPreview">
+  <div class="card-body">
+
+    <!-- Header and Page Size Selector -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <h5 class="fw-semibold mb-0">
+        Preview (showing {{ rangeStart }}–{{ rangeEnd }} of {{ previewTotal || totalRecords }})
+      </h5>
+
+      <div class="d-flex align-items-center gap-2">
+        <label class="mb-0 text-nowrap">Rows per page:</label>
+        <select class="form-select form-select-sm w-auto"
+                [ngModel]="pageSize"
+                (ngModelChange)="onPageSizeChange($event)">
+          <option *ngFor="let opt of pageSizeOptions" [ngValue]="opt">{{ opt }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="text-center my-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Table Preview -->
+    <div class="table-responsive mt-3" *ngIf="!isLoading">
+      <table id="previewTable" class="table table-sm table-bordered table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th *ngFor="let col of previewColumns" (click)="sortBy(col)" class="sortable">
+              {{ col }}
+              <span *ngIf="sortColumn === col">
+                <i [class]="sortDirection === 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down'"></i>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedRows; trackBy: trackByFn" (click)="onRowClick(row)" style="cursor: pointer;">
+            <td *ngFor="let col of previewColumns">
+              {{ row[col] }}
+            </td>
+          </tr>
+          <tr *ngIf="paginatedRows.length === 0">
+            <td [attr.colspan]="previewColumns.length" class="text-center text-muted">
+              <i class="bi bi-file-earmark-x fs-4"></i><br>
+              No rows to display
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Preview pagination" class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
+      
+      <!-- Responsive Dropdown for Small Screens -->
+      <div class="d-md-none w-100">
+        <select class="form-select form-select-sm" [(ngModel)]="pageIndex" (change)="goToPage(pageIndex)">
+          <option *ngFor="let i of [].constructor(totalPages); let index = index" [value]="index">
+            Page {{ index + 1 }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Pagination Controls and Page Info -->
+      <div class="d-flex align-items-center gap-2">
+        <ul class="pagination pagination-sm mb-0 d-none d-md-flex">
+          <li class="page-item" [class.disabled]="pageIndex === 0">
+            <button class="page-link" (click)="goToPage(0)" [disabled]="pageIndex === 0" aria-label="First">«</button>
+          </li>
+          <li class="page-item" [class.disabled]="pageIndex === 0">
+            <button class="page-link" (click)="prevPage()" [disabled]="pageIndex === 0" aria-label="Previous">‹</button>
+          </li>
+
+          <li class="page-item"
+              *ngFor="let _ of [].constructor(totalPages); let i = index"
+              [class.active]="i === pageIndex">
+            <button class="page-link" (click)="goToPage(i)">{{ i + 1 }}</button>
+          </li>
+
+          <li class="page-item" [class.disabled]="pageIndex >= totalPages - 1">
+            <button class="page-link" (click)="nextPage()" [disabled]="pageIndex >= totalPages - 1" aria-label="Next">›</button>
+          </li>
+          <li class="page-item" [class.disabled]="pageIndex >= totalPages - 1">
+            <button class="page-link" (click)="goToPage(totalPages - 1)" [disabled]="pageIndex >= totalPages - 1" aria-label="Last">»</button>
+          </li>
+        </ul>
+
+        <!-- Page Info -->
+        <small class="text-muted">Page {{ pageIndex + 1 }} of {{ totalPages }}</small>
+      </div>
+    </nav>
+
+  </div>
+</div>
+
+
+
+    <!-- ===================== END PREVIEW PANEL (added) ===================== -->
+
+  </div>
+</div>
